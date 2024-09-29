@@ -230,3 +230,20 @@ Gwynnda_Trash_Wheel <- Gwynnda_Trash_Wheel %>%
 combined_trash_wheel_data <- bind_rows(Mr_Trash_Wheel, Professor_Trash_Wheel, Gwynnda_Trash_Wheel)
 ```
 
+```{r}
+# Filter for Professor Trash Wheel and calculate the total weight
+total_weight_professor <- combined_trash_wheel_data %>%
+  filter(Trash_Wheel == "Professor Trash Wheel") %>%
+  summarize(total_weight = sum(Weight_tons, na.rm = TRUE))
+```
+
+```{r}
+# Filter the data for Gwynnda Trash Wheel in June 2022 and sum the Cigarette Butts
+total_cigarette_butts_gwynnda_june_2022 <- combined_trash_wheel_data %>%
+  filter(Trash_Wheel == "Gwynnda Trash Wheel", 
+         Month == "June", 
+         Year == 2022) %>%
+  summarize(total_cigarette_butts = sum(Cigarette_Butts, na.rm = TRUE))
+```
+
+After combining three dataset (Mr_Trash_Wheel, Professor_Trash_Wheel, Gwynnda_Trash_Wheel) to one single tidy dataset, we finally have `r nrow(combined_trash_wheel_data)` observations, key variables are like `r names(combined_trash_wheel_data)`. The total weight of trash collected by Professor Trash Wheel is `r total_weight_professor$total_weight` tons. The total number of cigarette butts collected by Gwynnda in June of 2022 is `r total_cigarette_butts_gwynnda_june_2022$total_cigarette_butts`.
