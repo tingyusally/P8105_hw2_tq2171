@@ -17,3 +17,14 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse) 
 ```
 
+
+```{r}
+## read and clean the data
+NYC_Transit = read_csv (file = "./NYC_Transit_Subway_Entrance_And_Exit_Data.csv", na = c("NA", ".")) #read the data
+names(NYC_Transit) # see the name of the variables in dataset NYC_Transit
+NYC_Transit = janitor::clean_names(NYC_Transit) #clean up variable names after importing data, this will take whatever the column names are and convert them to lower snake case.
+names(NYC_Transit) # check the name of the variable about clean
+```
+
+
+
