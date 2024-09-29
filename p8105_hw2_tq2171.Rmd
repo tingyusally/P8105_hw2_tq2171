@@ -10,3 +10,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
+# Problem 1
+
+```{r, results='hide'}
+# read the package
+library(tidyverse) 
+```
+
