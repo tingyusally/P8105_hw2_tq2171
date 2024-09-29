@@ -34,4 +34,7 @@ NYC_Transit<-
 
 ```
 
-
+```{r}
+## convert the entry variable from character to a logical variable
+NYC_Transit$entry <- ifelse(NYC_Transit$entry == "YES", TRUE, FALSE)
+```
