@@ -183,3 +183,22 @@ Professor_Trash_Wheel <- Professor_Trash_Wheel %>%
 print(head(Professor_Trash_Wheel))
 ```
 
+
+```{r}
+# For Gwynnda Trash Wheel
+# Specifying the sheet by name
+Gwynnda_Trash_Wheel <- read_excel("./202309 Trash Wheel Collection Data.xlsx", sheet = "Gwynnda Trash Wheel", skip = 1)
+
+# Rename columns to have reasonable variable names
+colnames(Gwynnda_Trash_Wheel) <- c("Dumpster", "Month", "Year", "Date", "Weight_tons", 
+                                 "Volume_cubic_yards", "Plastic_Bottles", "Polystyrene", 
+                                 "Cigarette_Butts","Plastic_Bags", 
+                                 "Wrappers", "Homes_Powered")
+
+# Omit rows that do not contain dumpster-specific data (i.e., filter rows with non-NA values in 'Dumpster')
+Gwynnda_Trash_Wheel <- Gwynnda_Trash_Wheel %>%
+  filter(!is.na(Dumpster))
+
+# View the cleaned data
+print(head(Gwynnda_Trash_Wheel))
+```
