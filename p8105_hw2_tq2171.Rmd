@@ -202,3 +202,16 @@ Gwynnda_Trash_Wheel <- Gwynnda_Trash_Wheel %>%
 # View the cleaned data
 print(head(Gwynnda_Trash_Wheel))
 ```
+
+```{r}
+# Add the Trash_Wheel column to each dataset to identify the source
+Mr_Trash_Wheel <- Mr_Trash_Wheel %>%
+  mutate(Trash_Wheel = "Mr. Trash Wheel")
+
+Professor_Trash_Wheel <- Professor_Trash_Wheel %>%
+  mutate(Trash_Wheel = "Professor Trash Wheel")
+
+Gwynnda_Trash_Wheel <- Gwynnda_Trash_Wheel %>%
+  mutate(Trash_Wheel = "Gwynnda Trash Wheel")
+```
+
