@@ -215,3 +215,18 @@ Gwynnda_Trash_Wheel <- Gwynnda_Trash_Wheel %>%
   mutate(Trash_Wheel = "Gwynnda Trash Wheel")
 ```
 
+```{r}
+# Ensure 'Year' is of the same type (e.g., character) in all datasets
+Mr_Trash_Wheel <- Mr_Trash_Wheel %>%
+  mutate(Year = as.character(Year))
+
+Professor_Trash_Wheel <- Professor_Trash_Wheel %>%
+  mutate(Year = as.character(Year))
+
+Gwynnda_Trash_Wheel <- Gwynnda_Trash_Wheel %>%
+  mutate(Year = as.character(Year))
+
+# Combine datasets with bind_rows(), filling missing columns with NA
+combined_trash_wheel_data <- bind_rows(Mr_Trash_Wheel, Professor_Trash_Wheel, Gwynnda_Trash_Wheel)
+```
+
