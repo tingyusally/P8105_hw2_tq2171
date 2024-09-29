@@ -121,4 +121,15 @@ print(num_a_train_stations)
 ```
 After reformate the data so that route number and route name are distinct variables, there are 60 distinct stations serve the A train. 
 
+```{r}
+# Filter for ADA compliant stations among those that serve the A train
+ada_compliant_a_train_stations <- a_train_stations %>%
+  filter(ada == "TRUE")
 
+# Count the number of ADA compliant A train stations
+num_ada_compliant_a_train_stations <- nrow(ada_compliant_a_train_stations)
+
+print(num_ada_compliant_a_train_stations)
+```
+
+Of the stations that serve the A train, there are 17 stations have ADA compliant.
