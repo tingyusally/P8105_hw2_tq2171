@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # read the package
 library(tidyverse) 
 library(dplyr)
+library(tidyr)
 ```
 
 
@@ -98,5 +99,26 @@ print(proportion_vending_no_d)
 ```
 
 For the proportion of station entrances/exits without vending allow entrance, we have 2 situations. One is for distinct stations, the other one is for the whole NYC transit dataset, which we do not find the proportion of station entrances/exits without vending allow entrance based on the distinct stations. For the proportion of station entrances/exits without vending allow entrance based on the non-distinct stations, we have 9.796%, and for the proportion of station entrances/exits without vending allow entrance based on the distinct stations, we have 1.935%.
+
+
+```{r}
+NYC_Transit_long <- 
+  NYC_Transit %>%
+  mutate(across(route1:route11, as.character)) %>%
+  pivot_longer(route1:route11, 
+               names_to = "route_number", 
+               values_to = "route") 
+
+# Filter for stations that serve the A train and get distinct stations
+a_train_stations <- NYC_Transit_long %>%
+  filter(route == "A") %>%
+  distinct(station_name, line, .keep_all = TRUE)
+
+# Count the number of distinct stations that serve the A train
+num_a_train_stations <- nrow(a_train_stations)
+
+print(num_a_train_stations)
+```
+After reformate the data so that route number and route name are distinct variables, there are 60 distinct stations serve the A train. 
 
 
