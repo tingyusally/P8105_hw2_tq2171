@@ -137,6 +137,7 @@ Of the stations that serve the A train, there are 17 stations have ADA compliant
 
 ## Problem 2
 ```{r}
+# For Mr.Trash Wheel
 # Specifying the sheet by name
 Mr_Trash_Wheel <- read_excel("./202309 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", skip = 1)
 
@@ -161,5 +162,24 @@ Mr_Trash_Wheel <- Mr_Trash_Wheel %>%
 
 # View the cleaned data
 print(head(Mr_Trash_Wheel))
+```
+
+```{r}
+# For Professor Trash Wheel
+# Specifying the sheet by name
+Professor_Trash_Wheel <- read_excel("./202309 Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", skip = 1)
+
+# Rename columns to have reasonable variable names
+colnames(Professor_Trash_Wheel) <- c("Dumpster", "Month", "Year", "Date", "Weight_tons", 
+                                 "Volume_cubic_yards", "Plastic_Bottles", "Polystyrene", 
+                                 "Cigarette_Butts", "Glass_Bottles", "Plastic_Bags", 
+                                 "Wrappers", "Homes_Powered")
+
+# Omit rows that do not contain dumpster-specific data (i.e., filter rows with non-NA values in 'Dumpster')
+Professor_Trash_Wheel <- Professor_Trash_Wheel %>%
+  filter(!is.na(Dumpster))
+
+# View the cleaned data
+print(head(Professor_Trash_Wheel))
 ```
 
