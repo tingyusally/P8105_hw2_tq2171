@@ -17,6 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse) 
 library(dplyr)
 library(tidyr)
+library(readxl)
 ```
 
 
@@ -133,3 +134,32 @@ print(num_ada_compliant_a_train_stations)
 ```
 
 Of the stations that serve the A train, there are 17 stations have ADA compliant.
+
+## Problem 2
+```{r}
+# Specifying the sheet by name
+Mr_Trash_Wheel <- read_excel("./202309 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", skip = 1)
+
+# Rename columns to have reasonable variable names
+colnames(Mr_Trash_Wheel) <- c("Dumpster", "Month", "Year", "Date", "Weight_tons", 
+                                 "Volume_cubic_yards", "Plastic_Bottles", "Polystyrene", 
+                                 "Cigarette_Butts", "Glass_Bottles", "Plastic_Bags", 
+                                 "Wrappers", "Sports_Balls", "Homes_Powered", "Notes", "Extra")
+
+# Remove columns containing notes (the last two columns 'Notes' and 'Extra')
+Mr_Trash_Wheel <- 
+  Mr_Trash_Wheel %>%
+  select(-Notes, -Extra)
+
+# Omit rows that do not contain dumpster-specific data (i.e., filter rows with non-NA values in 'Dumpster')
+Mr_Trash_Wheel <- Mr_Trash_Wheel %>%
+  filter(!is.na(Dumpster))
+
+# Round the number of sports balls to the nearest integer and convert to integer
+Mr_Trash_Wheel <- Mr_Trash_Wheel %>%
+  mutate(Sports_Balls = as.integer(round(Sports_Balls)))
+
+# View the cleaned data
+print(head(Mr_Trash_Wheel))
+```
+
