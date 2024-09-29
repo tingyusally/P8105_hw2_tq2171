@@ -27,4 +27,11 @@ names(NYC_Transit) # check the name of the variable about clean
 ```
 
 
+```{r}
+## retain the needed variables
+NYC_Transit<-
+  select(NYC_Transit, line, station_name, station_latitude, station_longitude, route1:route11, entry, vending, entrance_type, ada)
+
+```
+
 
