@@ -53,4 +53,27 @@ print(distinct_stations)
 ```
 There are 465 distinct stations.
 
+```{r}
+# Filter for ADA compliant stations (not distinct stations)
+ada_compliant_stations_nd <- 
+  NYC_Transit %>%
+  filter(ada == "TRUE")
+
+# Filter for ADA compliant stations (distinct stations)
+ada_compliant_stations_d <- 
+  NYC_Transit %>%
+  filter(ada == "TRUE") %>%
+  distinct(station_name, line)
+
+# Count the number of non_distinct ADA compliant stations
+num_nodistinct_ada_compliant_stations <- nrow(ada_compliant_stations_nd)
+
+# Count the number of distinct ADA compliant stations
+num_distinct_ada_compliant_stations <- nrow(ada_compliant_stations_d)
+
+print(num_nodistinct_ada_compliant_stations)
+print(num_distinct_ada_compliant_stations)
+```
+
+For the stations that are ADA compliant, we have 2 situations. One is for distinct stations, the other one is for the whole NYC transit dataset, which we do not find the number of the stations that are ADA compliant based on the distinct stations. For the number of the stations that are ADA compliant based on the non-distinct stations, we have 468 stations, and for the number of the stations that are ADA compliant based on the distinct stations, we have 84 stations.
 
