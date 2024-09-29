@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, results='hide'}
 # read the package
 library(tidyverse) 
+library(dplyr)
 ```
 
 
@@ -40,3 +41,16 @@ NYC_Transit$entry <- ifelse(NYC_Transit$entry == "YES", TRUE, FALSE)
 ```
 
 In the dataset NYC_Transit, it contains 1868 rows and 32 columns, which means there are 32 variables. These variables are "Division", "Line", "Station Name", "Station Latitude", "Station Longitude", "Route1", "Route2", "Route3", "Route4", "Route5", "Route6", "Route7", "Route8", "Route9", "Route10", "Route11", "Entrance Type", "Entry", "Exit Only", "Vending", "Staffing", "Staff Hours", "ADA", "ADA Notes", "Free Crossover", "North South Street", "East West Street", "Corner", "Entrance Latitude", "Entrance Longitude", "Station Location", "Entrance Location" . For the data cleaning step, I choose to clean up variable names, which is convert all variable names to lower snake case. After that I use the select function to remain the needed variables, which are "line", "station_name", "station_latitude", "station_longitude", "Route1", "Route2", "Route3", "Route4", "Route5", "Route6", "Route7", "Route8", "Route9", "Route10", "Route11", "entry", "vending", "entrance_type" and "ada". The resulting dataset contains 1868 row and 19 columns. These data are tidy, because this dataset satisfied the rules for tidy data, which are: 1. columns are variables 2. Rows are observations and 3. every value has a cell.
+
+
+```{r}
+## distinct stations
+distinct_stations <- 
+  NYC_Transit %>% 
+  distinct(station_name, line) %>%
+   summarize(count = n())
+print(distinct_stations)
+```
+There are 465 distinct stations.
+
+
