@@ -77,3 +77,26 @@ print(num_distinct_ada_compliant_stations)
 
 For the stations that are ADA compliant, we have 2 situations. One is for distinct stations, the other one is for the whole NYC transit dataset, which we do not find the number of the stations that are ADA compliant based on the distinct stations. For the number of the stations that are ADA compliant based on the non-distinct stations, we have 468 stations, and for the number of the stations that are ADA compliant based on the distinct stations, we have 84 stations.
 
+
+```{r}
+# Calculate the proportion of stations where vending is "NO" (non-distinct stations)
+proportion_vending_no_nd <- 
+  NYC_Transit %>%
+  summarize(proportion = mean(vending == "NO"))
+
+# Calculate the proportion of stations where vending is "NO" (distinct stations)
+distinct_stations <- 
+  NYC_Transit %>% 
+  distinct(station_name, line, .keep_all = TRUE)
+
+proportion_vending_no_d <- 
+  distinct_stations %>%
+  summarize(proportion = mean(vending == "NO"))
+
+print(proportion_vending_no_nd)
+print(proportion_vending_no_d)
+```
+
+For the proportion of station entrances/exits without vending allow entrance, we have 2 situations. One is for distinct stations, the other one is for the whole NYC transit dataset, which we do not find the proportion of station entrances/exits without vending allow entrance based on the distinct stations. For the proportion of station entrances/exits without vending allow entrance based on the non-distinct stations, we have 9.796%, and for the proportion of station entrances/exits without vending allow entrance based on the distinct stations, we have 1.935%.
+
+
