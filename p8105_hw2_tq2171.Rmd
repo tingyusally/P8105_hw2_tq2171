@@ -247,3 +247,51 @@ total_cigarette_butts_gwynnda_june_2022 <- combined_trash_wheel_data %>%
 ```
 
 After combining three dataset (Mr_Trash_Wheel, Professor_Trash_Wheel, Gwynnda_Trash_Wheel) to one single tidy dataset, we finally have `r nrow(combined_trash_wheel_data)` observations, key variables are like `r names(combined_trash_wheel_data)`. The total weight of trash collected by Professor Trash Wheel is `r total_weight_professor$total_weight` tons. The total number of cigarette butts collected by Gwynnda in June of 2022 is `r total_cigarette_butts_gwynnda_june_2022$total_cigarette_butts`.
+
+## Problem 3
+
+```{r}
+# read the dataset bakers, bakes and results
+bakers <- read_csv(file = "./gbb_datasets/bakers.csv")
+bakes <- read_csv(file = "./gbb_datasets/bakes.csv")
+results <- read_csv(file = "./gbb_datasets/results.csv", skip = 2)
+
+# clean up variable names
+bakers = janitor::clean_names(bakers)
+bakes = janitor::clean_names(bakes)
+results = janitor::clean_names(results)
+```
+
+```{r}
+# Extract first names from the full names in the bakers dataset
+bakers <- bakers %>%
+  mutate(baker_name = word(baker_name, 1)) 
+```
+
+
+```{r}
+# Check if all bakers in results are present in bakers (using first_name)
+missing_bakers <- anti_join(results, bakers, by = c("series", "baker" = "baker_name"))
+print(missing_bakers)
+
+# Check if all bakes in results are present in bakes
+missing_bakes <- anti_join(results, bakes, by = c("series", "episode", "baker"))
+print(missing_bakes)
+
+# Exclude rows from results that do not have matching bakers in bakers
+results <- results %>%
+  anti_join(missing_bakers, by = c("series", "baker"))
+
+# Exclude rows from results that do not have matching bakes in bakes
+results <- results %>%
+  anti_join(missing_bakes, by = c("series", "episode", "baker"))
+
+# Merge results with bakers and bakes
+merged_data <- results %>%
+  left_join(bakers, by = c("series", "baker" = "baker_name")) %>%
+  left_join(bakes, by = c("series", "episode", "baker"))
+
+# View the merged dataset
+head(merged_data)
+```
+
