@@ -307,3 +307,15 @@ A notable challenge was that the bakers dataset contained full names, while the 
 After ensuring that all datasets were consistent and clean, I merged them using left_join() based on shared keys such as series, episode, and baker. Following the merge, I reorganized the columns so that key variables, such as baker demographics, bake descriptions, and results, were easy to access. The final dataset was then exported as a CSV file for further analysis.
 
 The final dataset contains comprehensive information about the bakers, their bakes, and their performance across different episodes. This clean dataset is now ready for analysis and can be used to explore patterns in performance, baking success, and eliminations throughout the competition.
+
+```{r}
+# Filter data for Seasons 5 through 10 and episodes with a Star Baker or Winner
+star_baker_winner <- merged_data %>%
+  filter(series >= 5 & series <= 10, result %in% c("STAR BAKER", "WINNER")) %>%
+  select(series, episode, baker, result) %>%
+  arrange(series, episode)
+
+# View the reader-friendly table of Star Bakers and Winners for Seasons 5-10
+print(star_baker_winner)
+```
+In this table, I see the list of bakers who either earned Star Baker or became the Winner of each episode from Seasons 5 through 10. From the table, we can find that there were some predictable overall winners, and there were also some suprised overall winners. It is beacuse some bakers are winners or star bakers more than 1 times, and some of them only one time. For example in series 6, a baker named Nadiya wins 3 star bakers and 1 winners, so this will be predictable. 
