@@ -295,3 +295,8 @@ merged_data <- results %>%
 head(merged_data)
 ```
 
+```{r}
+# Export the final dataset to a CSV file
+write_csv(merged_data, "./final_bake_off_data.csv")
+```
+
