@@ -319,3 +319,20 @@ star_baker_winner <- merged_data %>%
 print(star_baker_winner)
 ```
 In this table, I see the list of bakers who either earned Star Baker or became the Winner of each episode from Seasons 5 through 10. From the table, we can find that there were some predictable overall winners, and there were also some suprised overall winners. It is beacuse some bakers are winners or star bakers more than 1 times, and some of them only one time. For example in series 6, a baker named Nadiya wins 3 star bakers and 1 winners, so this will be predictable. 
+
+```{r}
+# read the viewship data
+viewship <- read_csv(file = "./gbb_datasets/viewers.csv")
+
+# Convert the dataset from wide format to long format
+viewership_long <- viewship %>%
+  pivot_longer(cols = starts_with("Series"), 
+               names_to = "series", 
+               names_prefix = "Series ", 
+               values_to = "viewership") %>%
+  mutate(series = as.numeric(series))  # Convert series to numeric for calculations
+
+# Show the first 10 rows of the cleaned dataset
+head(viewership_long, 10)
+```
+
