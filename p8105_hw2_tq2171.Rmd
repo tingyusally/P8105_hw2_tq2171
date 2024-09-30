@@ -336,3 +336,19 @@ viewership_long <- viewship %>%
 head(viewership_long, 10)
 ```
 
+```{r}
+# Calculate average viewership for Season 1
+average_viewership_season1 <- viewership_long %>%
+  filter(Episode == 1) %>%
+  summarize(average_viewership = mean(viewership, na.rm = TRUE))
+
+# Calculate average viewership for Season 5
+average_viewership_season5 <- viewership_long %>%
+  filter(Episode == 5) %>%
+  summarize(average_viewership = mean(viewership, na.rm = TRUE))
+
+# Print the results
+print(average_viewership_season1)
+print(average_viewership_season5)
+```
+
