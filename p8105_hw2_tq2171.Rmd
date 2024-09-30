@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Problem 1
 
-```{r, results='hide'}
+```{r, message=FALSE}
 # read the package
 library(tidyverse) 
 library(dplyr)
@@ -21,12 +21,10 @@ library(readxl)
 ```
 
 
-```{r, results='hide'}
+```{r, warning=FALSE, message=FALSE}
 ## read and clean the data
 NYC_Transit = read_csv (file = "./NYC_Transit_Subway_Entrance_And_Exit_Data.csv", na = c("NA", ".")) #read the data
-names(NYC_Transit) # see the name of the variables in dataset NYC_Transit
 NYC_Transit = janitor::clean_names(NYC_Transit) #clean up variable names after importing data, this will take whatever the column names are and convert them to lower snake case.
-names(NYC_Transit) # check the name of the variable about clean
 ```
 
 
@@ -42,7 +40,7 @@ NYC_Transit<-
 NYC_Transit$entry <- ifelse(NYC_Transit$entry == "YES", TRUE, FALSE)
 ```
 
-In the dataset NYC_Transit, it contains 1868 rows and 32 columns, which means there are 32 variables. These variables are "Division", "Line", "Station Name", "Station Latitude", "Station Longitude", "Route1", "Route2", "Route3", "Route4", "Route5", "Route6", "Route7", "Route8", "Route9", "Route10", "Route11", "Entrance Type", "Entry", "Exit Only", "Vending", "Staffing", "Staff Hours", "ADA", "ADA Notes", "Free Crossover", "North South Street", "East West Street", "Corner", "Entrance Latitude", "Entrance Longitude", "Station Location", "Entrance Location" . For the data cleaning step, I choose to clean up variable names, which is convert all variable names to lower snake case. After that I use the select function to remain the needed variables, which are "line", "station_name", "station_latitude", "station_longitude", "Route1", "Route2", "Route3", "Route4", "Route5", "Route6", "Route7", "Route8", "Route9", "Route10", "Route11", "entry", "vending", "entrance_type" and "ada". The resulting dataset contains 1868 row and 19 columns. These data are not tidy, because the variable route 1 to route 11 all means route but different route, so this data is not tidy.
+In the original dataset NYC_Transit, it contains 1868 and 32 columns, which means there are 32 variables. These variables are "Division", "Line", "Station Name", "Station Latitude", "Station Longitude", "Route1", "Route2", "Route3", "Route4", "Route5", "Route6", "Route7", "Route8", "Route9", "Route10", "Route11", "Entrance Type", "Entry", "Exit Only", "Vending", "Staffing", "Staff Hours", "ADA", "ADA Notes", "Free Crossover", "North South Street", "East West Street", "Corner", "Entrance Latitude", "Entrance Longitude", "Station Location", "Entrance Location" . For the data cleaning step, I choose to clean up variable names, which is convert all variable names to lower snake case. After that I use the select function to remain the needed variables, which are "line", "station_name", "station_latitude", "station_longitude", "Route1", "Route2", "Route3", "Route4", "Route5", "Route6", "Route7", "Route8", "Route9", "Route10", "Route11", "entry", "vending", "entrance_type" and "ada". The resulting dataset contains `r nrow(NYC_Transit)` row and `r ncol(NYC_Transit)` columns. These data are not tidy, because the variable route 1 to route 11 all means route but different route, so this data is not tidy.
 
 
 ```{r}
@@ -52,7 +50,7 @@ distinct_stations <-
   distinct(station_name, line) %>%
    summarize(count = n())
 ```
-There are `r distinct_stations$counrt` distinct stations.
+There are `r distinct_stations$count` distinct stations.
 
 ```{r}
 # Filter for ADA compliant stations (not distinct stations)
@@ -127,7 +125,7 @@ num_ada_compliant_a_train_stations <- nrow(ada_compliant_a_train_stations)
 Of the stations that serve the A train, there are `r num_ada_compliant_a_train_stations` stations have ADA compliant.
 
 ## Problem 2
-```{r}
+```{r, warning=FALSE, message=FALSE}
 # For Mr.Trash Wheel
 # Specifying the sheet by name
 Mr_Trash_Wheel <- read_excel("./202309 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", skip = 1)
@@ -232,7 +230,7 @@ After combining three dataset (Mr_Trash_Wheel, Professor_Trash_Wheel, Gwynnda_Tr
 
 ## Problem 3
 
-```{r, results='hide'}
+```{r, warning=FALSE, message=FALSE}
 # read the dataset bakers, bakes and results
 bakers <- read_csv(file = "./gbb_datasets/bakers.csv")
 bakes <- read_csv(file = "./gbb_datasets/bakes.csv")
@@ -307,10 +305,12 @@ print(star_baker_winner)
 ```
 There are `r nrow(star_baker_winner)` Star Bakers and Winners for Seasons 5-10. In this table, I see the list of bakers who either earned Star Baker or became the Winner of each episode from Seasons 5 through 10. From the table, we can find that there were some predictable overall winners, and there were also some suprised overall winners. It is beacuse some bakers are winners or star bakers more than 1 times, and some of them only one time. For example in series 6, a baker named Nadiya wins 3 star bakers and 1 winners, so this will be predictable. 
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 # read the viewship data
 viewship <- read_csv(file = "./gbb_datasets/viewers.csv")
+```
 
+```{r}
 # Convert the dataset from wide format to long format
 viewership_long <- viewship %>%
   pivot_longer(cols = starts_with("Series"), 
