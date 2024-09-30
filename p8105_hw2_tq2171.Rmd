@@ -21,7 +21,7 @@ library(readxl)
 ```
 
 
-```{r}
+```{r, results='hide'}
 ## read and clean the data
 NYC_Transit = read_csv (file = "./NYC_Transit_Subway_Entrance_And_Exit_Data.csv", na = c("NA", ".")) #read the data
 names(NYC_Transit) # see the name of the variables in dataset NYC_Transit
@@ -42,7 +42,7 @@ NYC_Transit<-
 NYC_Transit$entry <- ifelse(NYC_Transit$entry == "YES", TRUE, FALSE)
 ```
 
-In the dataset NYC_Transit, it contains 1868 rows and 32 columns, which means there are 32 variables. These variables are "Division", "Line", "Station Name", "Station Latitude", "Station Longitude", "Route1", "Route2", "Route3", "Route4", "Route5", "Route6", "Route7", "Route8", "Route9", "Route10", "Route11", "Entrance Type", "Entry", "Exit Only", "Vending", "Staffing", "Staff Hours", "ADA", "ADA Notes", "Free Crossover", "North South Street", "East West Street", "Corner", "Entrance Latitude", "Entrance Longitude", "Station Location", "Entrance Location" . For the data cleaning step, I choose to clean up variable names, which is convert all variable names to lower snake case. After that I use the select function to remain the needed variables, which are "line", "station_name", "station_latitude", "station_longitude", "Route1", "Route2", "Route3", "Route4", "Route5", "Route6", "Route7", "Route8", "Route9", "Route10", "Route11", "entry", "vending", "entrance_type" and "ada". The resulting dataset contains 1868 row and 19 columns. These data are tidy, because this dataset satisfied the rules for tidy data, which are: 1. columns are variables 2. Rows are observations and 3. every value has a cell.
+In the dataset NYC_Transit, it contains 1868 rows and 32 columns, which means there are 32 variables. These variables are "Division", "Line", "Station Name", "Station Latitude", "Station Longitude", "Route1", "Route2", "Route3", "Route4", "Route5", "Route6", "Route7", "Route8", "Route9", "Route10", "Route11", "Entrance Type", "Entry", "Exit Only", "Vending", "Staffing", "Staff Hours", "ADA", "ADA Notes", "Free Crossover", "North South Street", "East West Street", "Corner", "Entrance Latitude", "Entrance Longitude", "Station Location", "Entrance Location" . For the data cleaning step, I choose to clean up variable names, which is convert all variable names to lower snake case. After that I use the select function to remain the needed variables, which are "line", "station_name", "station_latitude", "station_longitude", "Route1", "Route2", "Route3", "Route4", "Route5", "Route6", "Route7", "Route8", "Route9", "Route10", "Route11", "entry", "vending", "entrance_type" and "ada". The resulting dataset contains 1868 row and 19 columns. These data are not tidy, because the variable route 1 to route 11 all means route but different route, so this data is not tidy.
 
 
 ```{r}
@@ -51,9 +51,8 @@ distinct_stations <-
   NYC_Transit %>% 
   distinct(station_name, line) %>%
    summarize(count = n())
-print(distinct_stations)
 ```
-There are 465 distinct stations.
+There are `r distinct_stations$counrt` distinct stations.
 
 ```{r}
 # Filter for ADA compliant stations (not distinct stations)
@@ -72,19 +71,17 @@ num_nodistinct_ada_compliant_stations <- nrow(ada_compliant_stations_nd)
 
 # Count the number of distinct ADA compliant stations
 num_distinct_ada_compliant_stations <- nrow(ada_compliant_stations_d)
-
-print(num_nodistinct_ada_compliant_stations)
-print(num_distinct_ada_compliant_stations)
 ```
 
-For the stations that are ADA compliant, we have 2 situations. One is for distinct stations, the other one is for the whole NYC transit dataset, which we do not find the number of the stations that are ADA compliant based on the distinct stations. For the number of the stations that are ADA compliant based on the non-distinct stations, we have 468 stations, and for the number of the stations that are ADA compliant based on the distinct stations, we have 84 stations.
+For the stations that are ADA compliant, we have 2 situations. One is for distinct stations, the other one is for the whole NYC transit dataset, which we do not find the number of the stations that are ADA compliant based on the distinct stations. For the number of the stations that are ADA compliant based on the non-distinct stations, we have `r num_nodistinct_ada_compliant_stations` stations, and for the number of the stations that are ADA compliant based on the distinct stations, we have `r num_distinct_ada_compliant_stations` stations.
 
 
 ```{r}
 # Calculate the proportion of stations where vending is "NO" (non-distinct stations)
 proportion_vending_no_nd <- 
   NYC_Transit %>%
-  summarize(proportion = mean(vending == "NO"))
+  filter(vending == "NO") %>%
+  summarize(proportion = mean(entry == "TRUE"))
 
 # Calculate the proportion of stations where vending is "NO" (distinct stations)
 distinct_stations <- 
@@ -93,13 +90,11 @@ distinct_stations <-
 
 proportion_vending_no_d <- 
   distinct_stations %>%
-  summarize(proportion = mean(vending == "NO"))
-
-print(proportion_vending_no_nd)
-print(proportion_vending_no_d)
+  filter(vending == "NO") %>%
+  summarize(proportion = mean(entry == "TRUE"))
 ```
 
-For the proportion of station entrances/exits without vending allow entrance, we have 2 situations. One is for distinct stations, the other one is for the whole NYC transit dataset, which we do not find the proportion of station entrances/exits without vending allow entrance based on the distinct stations. For the proportion of station entrances/exits without vending allow entrance based on the non-distinct stations, we have 9.796%, and for the proportion of station entrances/exits without vending allow entrance based on the distinct stations, we have 1.935%.
+For the proportion of station entrances/exits without vending allow entrance, we have 2 situations. One is for distinct stations, the other one is for the whole NYC transit dataset, which we do not find the proportion of station entrances/exits without vending allow entrance based on the distinct stations. For the proportion of station entrances/exits without vending allow entrance based on the non-distinct stations, we have `r proportion_vending_no_nd$proportion` and for the proportion of station entrances/exits without vending allow entrance based on the distinct stations, we have `r proportion_vending_no_d$proportion`.
 
 
 ```{r}
@@ -117,10 +112,8 @@ a_train_stations <- NYC_Transit_long %>%
 
 # Count the number of distinct stations that serve the A train
 num_a_train_stations <- nrow(a_train_stations)
-
-print(num_a_train_stations)
 ```
-After reformate the data so that route number and route name are distinct variables, there are 60 distinct stations serve the A train. 
+After reformate the data so that route number and route name are distinct variables, there are `r num_a_train_stations` distinct stations serve the A train. 
 
 ```{r}
 # Filter for ADA compliant stations among those that serve the A train
@@ -129,11 +122,9 @@ ada_compliant_a_train_stations <- a_train_stations %>%
 
 # Count the number of ADA compliant A train stations
 num_ada_compliant_a_train_stations <- nrow(ada_compliant_a_train_stations)
-
-print(num_ada_compliant_a_train_stations)
 ```
 
-Of the stations that serve the A train, there are 17 stations have ADA compliant.
+Of the stations that serve the A train, there are `r num_ada_compliant_a_train_stations` stations have ADA compliant.
 
 ## Problem 2
 ```{r}
@@ -159,9 +150,6 @@ Mr_Trash_Wheel <- Mr_Trash_Wheel %>%
 # Round the number of sports balls to the nearest integer and convert to integer
 Mr_Trash_Wheel <- Mr_Trash_Wheel %>%
   mutate(Sports_Balls = as.integer(round(Sports_Balls)))
-
-# View the cleaned data
-print(head(Mr_Trash_Wheel))
 ```
 
 ```{r}
@@ -178,9 +166,6 @@ colnames(Professor_Trash_Wheel) <- c("Dumpster", "Month", "Year", "Date", "Weigh
 # Omit rows that do not contain dumpster-specific data (i.e., filter rows with non-NA values in 'Dumpster')
 Professor_Trash_Wheel <- Professor_Trash_Wheel %>%
   filter(!is.na(Dumpster))
-
-# View the cleaned data
-print(head(Professor_Trash_Wheel))
 ```
 
 
@@ -198,9 +183,6 @@ colnames(Gwynnda_Trash_Wheel) <- c("Dumpster", "Month", "Year", "Date", "Weight_
 # Omit rows that do not contain dumpster-specific data (i.e., filter rows with non-NA values in 'Dumpster')
 Gwynnda_Trash_Wheel <- Gwynnda_Trash_Wheel %>%
   filter(!is.na(Dumpster))
-
-# View the cleaned data
-print(head(Gwynnda_Trash_Wheel))
 ```
 
 ```{r}
@@ -250,7 +232,7 @@ After combining three dataset (Mr_Trash_Wheel, Professor_Trash_Wheel, Gwynnda_Tr
 
 ## Problem 3
 
-```{r}
+```{r, results='hide'}
 # read the dataset bakers, bakes and results
 bakers <- read_csv(file = "./gbb_datasets/bakers.csv")
 bakes <- read_csv(file = "./gbb_datasets/bakes.csv")
@@ -272,27 +254,32 @@ bakers <- bakers %>%
 ```{r}
 # Check if all bakers in results are present in bakers (using first_name)
 missing_bakers <- anti_join(results, bakers, by = c("series", "baker" = "baker_name"))
-print(missing_bakers)
 
 # Check if all bakes in results are present in bakes
 missing_bakes <- anti_join(results, bakes, by = c("series", "episode", "baker"))
-print(missing_bakes)
 
-# Exclude rows from results that do not have matching bakers in bakers
-results <- results %>%
-  anti_join(missing_bakers, by = c("series", "baker"))
+# Check if all bakes in bakers are present in bakes
+missing_bake_bakers <- anti_join(bakers, bakes, by = c("series", "baker_name"="baker"))
 
-# Exclude rows from results that do not have matching bakes in bakes
-results <- results %>%
-  anti_join(missing_bakes, by = c("series", "episode", "baker"))
+# Correct a typo in the baker name (Jo-Joanne) --bakers dataset
+bakers <- bakers %>%
+  mutate(baker_name = ifelse(baker_name == "Jo", "Joanne", baker_name))  # Correcting "Jo" to "Joanne"
+
+# Correct a typo in the baker name ("Jo"-Joanne) --bakes dataset
+bakes <- bakes %>%
+  mutate(baker = ifelse(baker == '"Jo"', "Joanne", baker))  # Correcting "Jo" to "Joanne"
+
+# Check if all bakers in results are present in bakers (using first_name) again
+missing_bakers <- anti_join(results, bakers, by = c("series", "baker" = "baker_name"))
+
+# Check if all bakes in results are present in bakes again
+missing_bakes <- anti_join(results, bakes, by = c("series", "episode", "baker"))
 
 # Merge results with bakers and bakes
 merged_data <- results %>%
   left_join(bakers, by = c("series", "baker" = "baker_name")) %>%
   left_join(bakes, by = c("series", "episode", "baker"))
 
-# View the merged dataset
-head(merged_data)
 ```
 
 ```{r}
@@ -302,7 +289,7 @@ write_csv(merged_data, "./final_bake_off_data.csv")
 
 The data cleaning process involved several key steps to ensure the bakers, bakes, and results datasets were merged into a single, well-organized dataset. Initially, all three datasets were imported to understand their structure. One of the first tasks was to standardize column names across all datasets using the janitor::clean_names() function, converting all names to a consistent snake_case format. 
 
-A notable challenge was that the bakers dataset contained full names, while the bakes and results datasets only included first names. To resolve this, I extracted the first names from the full names in the bakers dataset, ensuring that they would align with the other datasets during the merging process. I also used anti_join() to check for any missing or mismatched data between the datasets, particularly focusing on missing bakers or bakes. In cases where inconsistencies were found, I excluded them.
+A notable challenge was that the bakers dataset contained full names, while the bakes and results datasets only included first names. To resolve this, I extracted the first names from the full names in the bakers dataset, ensuring that they would align with the other datasets during the merging process. I also used anti_join() to check for any missing or mismatched data between the datasets. In the dataset "bakers", I found there is a baker named "Jo" in series 2 and episode 1-8, and there is a baker in the dataset results called "Joanne" also appears in series 2 episode 1-8, so I think they are same person, so I choose to mutate the name of "Jo"to the "Joanne", and in the dataset "bakes", I use the "Joanne" to replease the '"Jo"'. Also, there is no series 9 and series 10 in the dataset bakes, so when I use the antijoin between bake and bakers, it appears all bakers in series 9 and 10. Therefore, I will choose to keep them for the completeness. However, when I antijoin results and the bakes, I found there are some bakers appears in "results" but not in the dataset "bakes".
 
 After ensuring that all datasets were consistent and clean, I merged them using left_join() based on shared keys such as series, episode, and baker. Following the merge, I reorganized the columns so that key variables, such as baker demographics, bake descriptions, and results, were easy to access. The final dataset was then exported as a CSV file for further analysis.
 
@@ -318,7 +305,7 @@ star_baker_winner <- merged_data %>%
 # View the reader-friendly table of Star Bakers and Winners for Seasons 5-10
 print(star_baker_winner)
 ```
-In this table, I see the list of bakers who either earned Star Baker or became the Winner of each episode from Seasons 5 through 10. From the table, we can find that there were some predictable overall winners, and there were also some suprised overall winners. It is beacuse some bakers are winners or star bakers more than 1 times, and some of them only one time. For example in series 6, a baker named Nadiya wins 3 star bakers and 1 winners, so this will be predictable. 
+There are `r nrow(star_baker_winner)` Star Bakers and Winners for Seasons 5-10. In this table, I see the list of bakers who either earned Star Baker or became the Winner of each episode from Seasons 5 through 10. From the table, we can find that there were some predictable overall winners, and there were also some suprised overall winners. It is beacuse some bakers are winners or star bakers more than 1 times, and some of them only one time. For example in series 6, a baker named Nadiya wins 3 star bakers and 1 winners, so this will be predictable. 
 
 ```{r}
 # read the viewship data
@@ -346,9 +333,5 @@ average_viewership_season1 <- viewership_long %>%
 average_viewership_season5 <- viewership_long %>%
   filter(series == 5) %>%
   summarize(average_viewership = mean(viewership, na.rm = TRUE))
-
-# Print the results
-print(average_viewership_season1)
-print(average_viewership_season5)
 ```
-The average viewship for season1 (series1) is 2.77, and the average viewship for season5 (series5) is 10.0393
+The average viewship for season1 (series1) is `r average_viewership_season1$average_viewership`, and the average viewship for season5 (series5) is `r average_viewership_season5$average_viewership`.
