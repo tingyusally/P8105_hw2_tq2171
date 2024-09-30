@@ -300,3 +300,10 @@ head(merged_data)
 write_csv(merged_data, "./final_bake_off_data.csv")
 ```
 
+The data cleaning process involved several key steps to ensure the bakers, bakes, and results datasets were merged into a single, well-organized dataset. Initially, all three datasets were imported to understand their structure. One of the first tasks was to standardize column names across all datasets using the janitor::clean_names() function, converting all names to a consistent snake_case format. 
+
+A notable challenge was that the bakers dataset contained full names, while the bakes and results datasets only included first names. To resolve this, I extracted the first names from the full names in the bakers dataset, ensuring that they would align with the other datasets during the merging process. I also used anti_join() to check for any missing or mismatched data between the datasets, particularly focusing on missing bakers or bakes. In cases where inconsistencies were found, I excluded them.
+
+After ensuring that all datasets were consistent and clean, I merged them using left_join() based on shared keys such as series, episode, and baker. Following the merge, I reorganized the columns so that key variables, such as baker demographics, bake descriptions, and results, were easy to access. The final dataset was then exported as a CSV file for further analysis.
+
+The final dataset contains comprehensive information about the bakers, their bakes, and their performance across different episodes. This clean dataset is now ready for analysis and can be used to explore patterns in performance, baking success, and eliminations throughout the competition.
