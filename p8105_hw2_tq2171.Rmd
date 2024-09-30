@@ -339,16 +339,16 @@ head(viewership_long, 10)
 ```{r}
 # Calculate average viewership for Season 1
 average_viewership_season1 <- viewership_long %>%
-  filter(Episode == 1) %>%
+  filter(series == 1) %>%
   summarize(average_viewership = mean(viewership, na.rm = TRUE))
 
 # Calculate average viewership for Season 5
 average_viewership_season5 <- viewership_long %>%
-  filter(Episode == 5) %>%
+  filter(series == 5) %>%
   summarize(average_viewership = mean(viewership, na.rm = TRUE))
 
 # Print the results
 print(average_viewership_season1)
 print(average_viewership_season5)
 ```
-
+The average viewship for season1 (series1) is 2.77, and the average viewship for season5 (series5) is 10.0393
