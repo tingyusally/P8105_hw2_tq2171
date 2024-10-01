@@ -53,47 +53,27 @@ distinct_stations <-
 There are `r distinct_stations$count` distinct stations.
 
 ```{r}
-# Filter for ADA compliant stations (not distinct stations)
-ada_compliant_stations_nd <- 
-  NYC_Transit %>%
-  filter(ada == "TRUE")
-
 # Filter for ADA compliant stations (distinct stations)
 ada_compliant_stations_d <- 
   NYC_Transit %>%
   filter(ada == "TRUE") %>%
   distinct(station_name, line)
 
-# Count the number of non_distinct ADA compliant stations
-num_nodistinct_ada_compliant_stations <- nrow(ada_compliant_stations_nd)
-
-# Count the number of distinct ADA compliant stations
-num_distinct_ada_compliant_stations <- nrow(ada_compliant_stations_d)
+# Count the number of ADA compliant stations
+num_nodistinct_ada_compliant_stations <- nrow(ada_compliant_stations_d)
 ```
 
-For the stations that are ADA compliant, we have 2 situations. One is for distinct stations, the other one is for the whole NYC transit dataset, which we do not find the number of the stations that are ADA compliant based on the distinct stations. For the number of the stations that are ADA compliant based on the non-distinct stations, we have `r num_nodistinct_ada_compliant_stations` stations, and for the number of the stations that are ADA compliant based on the distinct stations, we have `r num_distinct_ada_compliant_stations` stations.
+For the stations that are ADA compliant, we have `r num_nodistinct_ada_compliant_stations` stations.
 
 
 ```{r}
-# Calculate the proportion of stations where vending is "NO" (non-distinct stations)
+# Calculate the proportion of stations where vending is "NO"
 proportion_vending_no_nd <- 
   NYC_Transit %>%
   filter(vending == "NO") %>%
   summarize(proportion = mean(entry == "TRUE"))
-
-# Calculate the proportion of stations where vending is "NO" (distinct stations)
-distinct_stations <- 
-  NYC_Transit %>% 
-  distinct(station_name, line, .keep_all = TRUE)
-
-proportion_vending_no_d <- 
-  distinct_stations %>%
-  filter(vending == "NO") %>%
-  summarize(proportion = mean(entry == "TRUE"))
 ```
-
-For the proportion of station entrances/exits without vending allow entrance, we have 2 situations. One is for distinct stations, the other one is for the whole NYC transit dataset, which we do not find the proportion of station entrances/exits without vending allow entrance based on the distinct stations. For the proportion of station entrances/exits without vending allow entrance based on the non-distinct stations, we have `r proportion_vending_no_nd$proportion` and for the proportion of station entrances/exits without vending allow entrance based on the distinct stations, we have `r proportion_vending_no_d$proportion`.
-
+For the proportion of station entrances/exits without vending allow entrance, we have `r proportion_vending_no_nd$proportion`.
 
 ```{r}
 NYC_Transit_long <- 
@@ -128,7 +108,7 @@ Of the stations that serve the A train, there are `r num_ada_compliant_a_train_s
 ```{r, warning=FALSE, message=FALSE}
 # For Mr.Trash Wheel
 # Specifying the sheet by name
-Mr_Trash_Wheel <- read_excel("./202309 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", skip = 1)
+Mr_Trash_Wheel <- read_excel("./202409 Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", skip = 1)
 
 # Rename columns to have reasonable variable names
 colnames(Mr_Trash_Wheel) <- c("Dumpster", "Month", "Year", "Date", "Weight_tons", 
@@ -153,7 +133,7 @@ Mr_Trash_Wheel <- Mr_Trash_Wheel %>%
 ```{r}
 # For Professor Trash Wheel
 # Specifying the sheet by name
-Professor_Trash_Wheel <- read_excel("./202309 Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", skip = 1)
+Professor_Trash_Wheel <- read_excel("./202409 Trash Wheel Collection Data.xlsx", sheet = "Professor Trash Wheel", skip = 1)
 
 # Rename columns to have reasonable variable names
 colnames(Professor_Trash_Wheel) <- c("Dumpster", "Month", "Year", "Date", "Weight_tons", 
@@ -170,7 +150,7 @@ Professor_Trash_Wheel <- Professor_Trash_Wheel %>%
 ```{r}
 # For Gwynnda Trash Wheel
 # Specifying the sheet by name
-Gwynnda_Trash_Wheel <- read_excel("./202309 Trash Wheel Collection Data.xlsx", sheet = "Gwynnda Trash Wheel", skip = 1)
+Gwynnda_Trash_Wheel <- read_excel("./202409 Trash Wheel Collection Data.xlsx", sheet = "Gwynnda Trash Wheel", skip = 1)
 
 # Rename columns to have reasonable variable names
 colnames(Gwynnda_Trash_Wheel) <- c("Dumpster", "Month", "Year", "Date", "Weight_tons", 
